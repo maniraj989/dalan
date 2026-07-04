@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dalan - Nepalese Restaurant & Food Delivery</title>
+    <title>Dalan - Nepalese Restaurant &amp; Food Delivery</title>
     <!-- Stylesheet -->
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -56,6 +56,16 @@
                 <p class="auth-subtitle">Help us deliver food right to your doorstep</p>
             </div>
 
+            <!-- Location Permission Banner -->
+            <div id="location-permission-banner" class="location-banner">
+                <div class="location-banner-icon">📍</div>
+                <div class="location-banner-text">
+                    <strong>Enable Location</strong>
+                    <span>For accurate delivery to your doorstep</span>
+                </div>
+                <button id="location-allow-btn" class="location-allow-btn">Allow</button>
+            </div>
+
             <!-- Profile Picture Section -->
             <div class="profile-photo-container">
                 <div class="photo-uploader">
@@ -92,8 +102,8 @@
                         <span
                             style="display:flex; align-items:center; justify-content:center; padding: 0 0.8rem; background: var(--bg-app); border-right: 1px solid var(--border-color); font-weight:600; color: var(--text-dark);">🇳🇵
                             +977</span>
-                        <input type="tel" id="profile-phone" class="phone-input" placeholder="98XXXXXXXX" maxlength="10"
-                            required>
+                        <input type="tel" id="profile-phone" class="phone-input" placeholder="98XXXXXXXX"
+                            maxlength="10" required>
                     </div>
                 </div>
 
@@ -132,7 +142,8 @@
              4. MAIN MENU & DISCOVERY SCREEN
              ========================================== -->
         <section id="dashboard-screen" class="screen">
-            <!-- Header Block -->
+
+            <!-- ── Fixed Header (never scrolls) ── -->
             <div class="header-sticky">
                 <div class="header-top">
                     <div class="header-logo-brand">
@@ -140,11 +151,12 @@
                         <span class="header-title-text">Dalan</span>
                     </div>
 
-                    <!-- Address selector -->
-                    <div id="address-picker-btn" class="address-picker">
-                        <span>Kumari Pati Road, Lalitpur...</span>
-                        <small style="font-size: 0.6rem;">▼</small>
-                    </div>
+                    <!-- Quick Order Button with Cart Badge -->
+                    <button id="quick-order-btn" class="quick-order-btn">
+                        <span class="quick-order-icon">🛒</span>
+                        <span>Order Now</span>
+                        <span id="header-cart-badge" class="header-cart-badge" style="display:none;">0</span>
+                    </button>
 
                     <!-- Profile Avatar -->
                     <img id="profile-avatar-trigger"
@@ -160,87 +172,103 @@
                 </div>
             </div>
 
-            <!-- Banner Carousel / Promotions -->
-            <div class="promo-carousel-container">
-                <div class="promo-carousel">
-                    <div class="promo-card">
-                        <span class="promo-badge">Dalan Special</span>
-                        <h3 class="promo-title">Chai & Momos Combo</h3>
-                        <p class="promo-desc">Get free Masala Tea with every Buff Momo order today!</p>
-                    </div>
-                    <div class="promo-card" style="background: linear-gradient(135deg, #248046 0%, #2E221E 100%);">
-                        <span class="promo-badge">Delivery Bonus</span>
-                        <h3 class="promo-title">Free Delivery</h3>
-                        <p class="promo-desc">Free home delivery on orders exceeding Rs. 500 across Kathmandu valley.
-                        </p>
-                    </div>
-                </div>
-            </div>
+            <!-- ── Scrollable body ── scrolls independently, cart bar stays below -->
+            <div class="dashboard-scroll-body">
 
-            <!-- Category Section -->
-            <div class="category-section">
-                <h2 class="section-title">What are you craving?</h2>
-                <div class="category-scroll">
-                    <div class="category-item" data-category="All">
-                        <div class="category-circle" style="border-color: var(--primary);">
-                            <span class="category-icon">🍽️</span>
+                <!-- Banner Carousel / Promotions -->
+                <div class="promo-carousel-container">
+                    <div class="promo-carousel">
+                        <div class="promo-card">
+                            <span class="promo-badge">Dalan Special</span>
+                            <h3 class="promo-title">Chai &amp; Momos Combo</h3>
+                            <p class="promo-desc">Get free Masala Tea with every Buff Momo order today!</p>
                         </div>
-                        <span class="category-name" style="color: var(--primary);">All</span>
-                    </div>
-                    <div class="category-item" data-category="Momo">
-                        <div class="category-circle">
-                            <span class="category-icon">🥟</span>
+                        <div class="promo-card"
+                            style="background: linear-gradient(135deg, #248046 0%, #2E221E 100%);">
+                            <span class="promo-badge">Delivery Bonus</span>
+                            <h3 class="promo-title">Free Delivery</h3>
+                            <p class="promo-desc">Free home delivery on orders exceeding Rs. 500 across Kathmandu
+                                valley.</p>
                         </div>
-                        <span class="category-name">Momo</span>
-                    </div>
-                    <div class="category-item" data-category="Traditional Platters">
-                        <div class="category-circle">
-                            <span class="category-icon">🍛</span>
-                        </div>
-                        <span class="category-name">Platters</span>
-                    </div>
-                    <div class="category-item" data-category="Beverages">
-                        <div class="category-circle">
-                            <span class="category-icon">☕</span>
-                        </div>
-                        <span class="category-name">Beverages</span>
-                    </div>
-                    <div class="category-item" data-category="Desserts">
-                        <div class="category-circle">
-                            <span class="category-icon">🍰</span>
-                        </div>
-                        <span class="category-name">Desserts</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Restaurant Feed List -->
-            <div class="feed-section">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h2 class="section-title" style="margin-bottom:0;">Dalan's Kitchen Specialties</h2>
-                    <div class="feed-filters">
-                        <span class="filter-badge active" onclick="showToast('Showing default rankings')">Popular</span>
-                        <span class="filter-badge" onclick="showToast('Sorted by rating')">Rating 4.5+</span>
-                        <span class="filter-badge" onclick="showToast('Veg only filter')">Veg Only</span>
                     </div>
                 </div>
 
-                <div id="dalan-menu-list" class="menu-item-list">
-                    <!-- Loaded dynamically via app.js -->
+                <!-- Category Section -->
+                <div class="category-section">
+                    <h2 class="section-title">What are you craving?</h2>
+                    <div class="category-scroll">
+                        <div class="category-item" data-category="All">
+                            <div class="category-circle" style="border-color: var(--primary);">
+                                <span class="category-icon">🍽️</span>
+                            </div>
+                            <span class="category-name" style="color: var(--primary);">All</span>
+                        </div>
+                        <div class="category-item" data-category="Momo">
+                            <div class="category-circle">
+                                <span class="category-icon">🥟</span>
+                            </div>
+                            <span class="category-name">Momo</span>
+                        </div>
+                        <div class="category-item" data-category="Traditional Platters">
+                            <div class="category-circle">
+                                <span class="category-icon">🍛</span>
+                            </div>
+                            <span class="category-name">Platters</span>
+                        </div>
+                        <div class="category-item" data-category="Beverages">
+                            <div class="category-circle">
+                                <span class="category-icon">☕</span>
+                            </div>
+                            <span class="category-name">Beverages</span>
+                        </div>
+                        <div class="category-item" data-category="Desserts">
+                            <div class="category-circle">
+                                <span class="category-icon">🍰</span>
+                            </div>
+                            <span class="category-name">Desserts</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Floating Cart Bottom notification -->
+                <!-- Restaurant Feed List -->
+                <div class="feed-section">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h2 class="section-title" style="margin-bottom:0;">Dalan's Kitchen Specialties</h2>
+                        <div class="feed-filters">
+                            <span class="filter-badge active"
+                                onclick="showToast('Showing default rankings')">Popular</span>
+                            <span class="filter-badge" onclick="showToast('Sorted by rating')">Rating 4.5+</span>
+                            <span class="filter-badge" onclick="showToast('Veg only filter')">Veg Only</span>
+                        </div>
+                    </div>
+
+                    <div id="dalan-menu-list" class="menu-item-list">
+                        <!-- Loaded dynamically via app.js -->
+                    </div>
+                </div>
+
+            </div><!-- /.dashboard-scroll-body -->
+
+            <!-- ── Cart Snackbar — OUTSIDE scroll body, sticks to the bottom always ── -->
             <div id="floating-cart-bar" class="floating-cart-bar">
-                <div class="cart-bar-left">
-                    <span id="cart-bar-qty" class="cart-bar-qty">1 item</span>
-                    <span id="cart-bar-total" class="cart-bar-total">Rs. 150.00</span>
-                </div>
-                <div class="cart-bar-right">
-                    <span>View Cart</span>
-                    <span style="font-size: 0.8rem;">❯</span>
+                <div class="cart-snack-inner">
+                    <div class="cart-snack-left">
+                        <div class="cart-snack-count" id="cart-bar-qty">0</div>
+                        <div class="cart-snack-info">
+                            <span class="cart-snack-label">Your Order</span>
+                            <span id="cart-bar-total" class="cart-snack-total">Rs. 0.00</span>
+                        </div>
+                    </div>
+                    <div class="cart-snack-right">
+                        <span>View Cart</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </div>
                 </div>
             </div>
+
         </section>
 
         <!-- ==========================================
@@ -248,38 +276,66 @@
              ========================================== -->
         <div id="cart-drawer-overlay" class="cart-drawer-overlay"></div>
         <div id="cart-drawer" class="cart-drawer">
+
+            <!-- Drawer Handle Bar -->
+            <div class="drawer-handle-bar"></div>
+
+            <!-- Drawer Header -->
             <div class="drawer-header">
-                <h3 class="drawer-title">Shopping Cart</h3>
-                <button id="drawer-close" class="drawer-close">&times;</button>
+                <div class="drawer-header-left">
+                    <h3 class="drawer-title">🛒 Your Cart</h3>
+                    <span id="drawer-item-count" class="drawer-item-count">0 items</span>
+                </div>
+                <button id="drawer-close" class="drawer-close" aria-label="Close Cart">&times;</button>
             </div>
 
+            <!-- Empty Cart State -->
+            <div id="cart-empty-state" class="cart-empty-state" style="display:none;">
+                <div class="cart-empty-icon">🛍️</div>
+                <p class="cart-empty-title">Your cart is empty</p>
+                <p class="cart-empty-sub">Add some delicious items from Dalan's kitchen!</p>
+                <button id="cart-browse-btn" class="btn-primary"
+                    style="margin-top:1rem; padding: 0.75rem 2rem; width:auto;">
+                    Browse Menu
+                </button>
+            </div>
+
+            <!-- Cart Items List -->
             <div id="cart-items-list" class="cart-items-list">
                 <!-- Items loaded dynamically -->
             </div>
 
-            <!-- Price Breakdown Summary -->
-            <div class="cart-summary-block">
-                <div class="summary-row">
-                    <span>Subtotal</span>
-                    <span id="summary-subtotal">Rs. 0.00</span>
+            <!-- Price Breakdown + Checkout -->
+            <div id="cart-checkout-block" class="cart-checkout-block">
+                <div class="cart-summary-block">
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span id="summary-subtotal">Rs. 0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>🛵 Delivery</span>
+                        <span id="summary-delivery">Rs. 50.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Taxes &amp; Pack fees</span>
+                        <span>Rs. 15.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Grand Total</span>
+                        <span id="summary-total">Rs. 65.00</span>
+                    </div>
                 </div>
-                <div class="summary-row">
-                    <span>Delivery Charges</span>
-                    <span id="summary-delivery">Rs. 50.00</span>
-                </div>
-                <div class="summary-row" style="border-bottom: 1px dashed var(--border-color); padding-bottom: 0.5rem;">
-                    <span>Taxes & Restaurant Pack fees</span>
-                    <span>Rs. 15.00</span>
-                </div>
-                <div class="summary-row total">
-                    <span>Grand Total</span>
-                    <span id="summary-total">Rs. 65.00</span>
-                </div>
-            </div>
 
-            <button id="checkout-btn" class="btn-primary" style="width: 100%; gap:0.75rem;">
-                🚀 Confirm & Place Order
-            </button>
+                <!-- Free delivery unlock banner -->
+                <div id="free-delivery-note" class="free-delivery-note" style="display:none;">
+                    🎉 You've unlocked <strong>Free Delivery!</strong>
+                </div>
+
+                <button id="checkout-btn" class="btn-checkout">
+                    <span>Confirm &amp; Place Order</span>
+                    <span id="checkout-total-label" class="checkout-total-label">Rs. 0.00</span>
+                </button>
+            </div>
         </div>
 
     </div>

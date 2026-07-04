@@ -169,6 +169,8 @@ let appState = {
     selectedCategory: 'All',
     searchQuery: '',
     currentAddress: 'Kumari Pati Road, Lalitpur',
+    userLatitude: null,
+    userLongitude: null,
 };
 
 // 4. ROUTER & SCREEN SWITCHER
@@ -294,6 +296,64 @@ async function checkProfileAndNavigate() {
 // ==========================================
 // 7. PHASE 2: PROFILE COMPLETION & CLOSE INTERACTION
 // ==========================================
+
+// Utility: Fetch real GPS location and fill form fields
+function fetchUserLocation(onSuccess) {
+    const latInput = document.getElementById('latitude');
+    const lngInput = document.getElementById('longitude');
+    const addressInput = document.getElementById('delivery-address');
+    const gpsBtn = document.getElementById('gps-simulate-btn');
+    const banner = document.getElementById('location-permission-banner');
+
+    if (!navigator.geolocation) {
+        showToast('Geolocation not supported by your browser.', 'error');
+        return;
+    }
+
+    if (gpsBtn) { gpsBtn.innerText = 'Locating…'; }
+
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const lat = position.coords.latitude.toFixed(6);
+            const lng = position.coords.longitude.toFixed(6);
+
+            latInput.value = lat;
+            lngInput.value = lng;
+            appState.userLatitude = parseFloat(lat);
+            appState.userLongitude = parseFloat(lng);
+
+            // Reverse-geocode via nominatim (free, no key required)
+            fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`)
+                .then(r => r.json())
+                .then(data => {
+                    const addr = data.display_name || `Lat: ${lat}, Lng: ${lng}`;
+                    if (!addressInput.value) addressInput.value = addr;
+                    appState.currentAddress = addressInput.value;
+                })
+                .catch(() => {
+                    if (!addressInput.value) addressInput.value = `Lat: ${lat}, Lng: ${lng}`;
+                });
+
+            if (gpsBtn) { gpsBtn.innerText = '\u2705 GPS Located'; }
+            // Hide banner since location was granted
+            if (banner) { banner.classList.add('banner-granted'); }
+            showToast('Real-time location obtained!', 'success');
+            if (onSuccess) onSuccess(lat, lng);
+        },
+        (err) => {
+            if (gpsBtn) { gpsBtn.innerText = '\ud83d\udccd Fetch GPS Coords'; }
+            // Show banner when denied
+            if (banner) { banner.classList.remove('banner-granted'); }
+            let msg = 'Location access denied.';
+            if (err.code === 1) msg = 'Location permission denied. Please allow it in browser settings.';
+            else if (err.code === 2) msg = 'Location unavailable. Check your device GPS.';
+            else if (err.code === 3) msg = 'Location request timed out.';
+            showToast(msg, 'error');
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+}
+
 function setupProfileEvents() {
     const profileForm = document.getElementById('profile-form');
     const photoFileInput = document.getElementById('profile-photo-file');
@@ -304,6 +364,8 @@ function setupProfileEvents() {
     const latInput = document.getElementById('latitude');
     const lngInput = document.getElementById('longitude');
     const profileCloseBtn = document.getElementById('profile-close-btn');
+    const locationAllowBtn = document.getElementById('location-allow-btn');
+    const locationBanner = document.getElementById('location-permission-banner');
 
     // 1. Close overlay button handler (dynamic modal behavior)
     profileCloseBtn.addEventListener('click', () => {
@@ -328,19 +390,40 @@ function setupProfileEvents() {
         }
     });
 
-    // GPS Simulation button click
+    // Location Allow banner button
+    if (locationAllowBtn) {
+        locationAllowBtn.addEventListener('click', () => {
+            locationAllowBtn.disabled = true;
+            locationAllowBtn.innerText = 'Locating…';
+            fetchUserLocation(() => {
+                locationAllowBtn.innerText = 'Granted ✅';
+            });
+        });
+    }
+
+    // Real GPS button click
     gpsBtn.addEventListener('click', () => {
-        gpsBtn.innerText = 'Locating...';
-        
-        // Simulating geo-coordinates search
-        setTimeout(() => {
-            latInput.value = '27.6710';
-            lngInput.value = '85.3218';
-            addressInput.value = 'Kumari Pati Road, Lalitpur, Nepal';
-            gpsBtn.innerText = 'GPS Located';
-            showToast('Coordinates resolved automatically!', 'success');
-        }, 1200);
+        fetchUserLocation();
     });
+
+    // Auto-request location when profile screen is navigated to
+    const profileScreen = document.getElementById('profile-screen');
+    const profileObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                if (profileScreen.classList.contains('active')) {
+                    // Check if location already set
+                    if (!latInput.value) {
+                        // Small delay so the screen animation completes first
+                        setTimeout(() => {
+                            fetchUserLocation();
+                        }, 600);
+                    }
+                }
+            }
+        });
+    });
+    profileObserver.observe(profileScreen, { attributes: true });
 
     // Form submission
     profileForm.addEventListener('submit', async (e) => {
@@ -395,23 +478,24 @@ function setupProfileEvents() {
                 profilePhotoUrl = avatarImg.src;
             }
 
-            // Save user profile metadata to PostgreSQL Database (linking phone & coordinates)
+            // Save user profile metadata to PostgreSQL Database via UPSERT
+            // upsert handles both first-time insert and subsequent updates
             const { error: updateError } = await supabaseClient
                 .from('profiles')
-                .update({
+                .upsert({
+                    id: appState.currentUser.id,
                     name: name,
                     email: email,
                     phone: '+977' + phone,
                     delivery_address: address,
-                    latitude: lat || null,
-                    longitude: lng || null,
+                    latitude: lat || appState.userLatitude || null,
+                    longitude: lng || appState.userLongitude || null,
                     profile_photo_url: profilePhotoUrl,
                     updated_at: new Date().toISOString()
-                })
-                .eq('id', appState.currentUser.id);
+                }, { onConflict: 'id' });
 
             if (updateError) {
-                showToast(updateError.message, 'error');
+                showToast('Save failed: ' + updateError.message, 'error');
                 submitBtn.disabled = false;
                 submitBtn.innerText = 'Complete Registration';
                 return;
@@ -448,8 +532,8 @@ function setupProfileEvents() {
 function setupDashboardEvents() {
     const searchInput = document.getElementById('dashboard-search');
     const categoryItems = document.querySelectorAll('.category-item');
-    const addressBtn = document.getElementById('address-picker-btn');
     const topAvatar = document.getElementById('profile-avatar-trigger');
+    const quickOrderBtn = document.getElementById('quick-order-btn');
 
     // 1. Search Box input listener
     searchInput.addEventListener('input', (e) => {
@@ -475,15 +559,20 @@ function setupDashboardEvents() {
         });
     });
 
-    // 3. Quick Address editor trigger
-    addressBtn.addEventListener('click', () => {
-        const newAddr = prompt('Update Delivery Location:', appState.currentAddress);
-        if (newAddr) {
-            appState.currentAddress = newAddr;
-            updateUIAddress();
-            showToast('Delivery location modified.');
-        }
-    });
+    // 3. Order Now button - opens cart if has items, else nudges to browse
+    if (quickOrderBtn) {
+        quickOrderBtn.addEventListener('click', () => {
+            if (appState.cart.length > 0) {
+                openCartDrawer();
+            } else {
+                quickOrderBtn.classList.add('btn-pulse');
+                setTimeout(() => quickOrderBtn.classList.remove('btn-pulse'), 600);
+                const feedSection = document.querySelector('#dashboard-screen .feed-section');
+                if (feedSection) feedSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                showToast('\ud83c\udf7d\ufe0f Add items to your cart first!');
+            }
+        });
+    }
 
     // 4. Return to Profile page via header icon click
     topAvatar.addEventListener('click', () => {
@@ -495,10 +584,8 @@ function setupDashboardEvents() {
 }
 
 function updateUIAddress() {
-    const pickerSpan = document.querySelector('#address-picker-btn span');
-    if (pickerSpan) {
-        pickerSpan.innerText = appState.currentAddress;
-    }
+    // Address display removed (replaced with Order Now button)
+    // Keep function for legacy calls that may reference it
 }
 
 // Render Dalan Menu Feed dynamically based on categories & search filters
@@ -536,11 +623,24 @@ function renderDalanMenu() {
     filteredList.forEach(item => {
         const card = document.createElement('div');
         card.className = 'menu-item-card';
+        card.dataset.itemId = item.id;
+
+        const cartEntry = appState.cart.find(c => c.item.id === item.id);
+        const qtyInCart = cartEntry ? cartEntry.quantity : 0;
+
+        const addBtnHtml = qtyInCart > 0
+            ? `<div class="item-qty-stepper" id="stepper-${item.id}">
+                   <button class="qty-btn-mini" onclick="addToCart('${encodeURIComponent(JSON.stringify(item))}', -1)">-</button>
+                   <span class="qty-val-mini">${qtyInCart}</span>
+                   <button class="qty-btn-mini" onclick="addToCart('${encodeURIComponent(JSON.stringify(item))}', 1)">+</button>
+               </div>`
+            : `<button class="btn-item-add" id="add-btn-${item.id}" onclick="addToCart('${encodeURIComponent(JSON.stringify(item))}')">Add +</button>`;
+
         card.innerHTML = `
             <div class="item-image-wrapper">
                 <img src="${item.image_url}" class="item-image" alt="${item.name}">
                 <div class="item-meta-badges">
-                    <span class="badge-item ${item.is_veg ? 'badge-veg-green' : 'badge-veg-red'}">${item.is_veg ? 'Veg' : 'Non-Veg'}</span>
+                    <span class="badge-item ${item.is_veg ? 'badge-veg-green' : 'badge-veg-red'}">${item.is_veg ? '\ud83d\udfe2 Veg' : '\ud83d\udd34 Non-Veg'}</span>
                 </div>
             </div>
             <div class="item-info">
@@ -548,16 +648,16 @@ function renderDalanMenu() {
                     <h3 class="item-name">${item.name}</h3>
                     <div class="item-rating-badge">
                         <span>${item.rating}</span>
-                        <span style="font-size: 0.6rem;">★</span>
+                        <span style="font-size: 0.6rem;">\u2605</span>
                     </div>
                 </div>
                 <p class="item-desc">${item.description}</p>
                 <div class="item-footer-row">
                     <div class="item-price-wrapper">
                         <span class="item-price">Rs. ${item.price}</span>
-                        <span class="item-time">🕒 ${item.delivery_time_mins} mins</span>
+                        <span class="item-time">\ud83d\udd52 ${item.delivery_time_mins} mins</span>
                     </div>
-                    <button class="btn-item-add" onclick="addToCart('${encodeURIComponent(JSON.stringify(item))}')">Add</button>
+                    ${addBtnHtml}
                 </div>
             </div>
         `;
@@ -568,103 +668,179 @@ function renderDalanMenu() {
 // ==========================================
 // 9. SHOPPING CART ENGINE
 // ==========================================
+
+function openCartDrawer() {
+    const overlay = document.getElementById('cart-drawer-overlay');
+    const drawer = document.getElementById('cart-drawer');
+    renderCartDrawer();
+    overlay.classList.add('active');
+    drawer.classList.add('active');
+}
+
+function closeCartDrawer() {
+    document.getElementById('cart-drawer-overlay').classList.remove('active');
+    document.getElementById('cart-drawer').classList.remove('active');
+}
+
 function setupCartEvents() {
     const floatingBar = document.getElementById('floating-cart-bar');
     const overlay = document.getElementById('cart-drawer-overlay');
     const drawer = document.getElementById('cart-drawer');
     const closeBtn = document.getElementById('drawer-close');
     const checkoutBtn = document.getElementById('checkout-btn');
+    const cartBrowseBtn = document.getElementById('cart-browse-btn');
 
-    // Toggle opening
-    floatingBar.addEventListener('click', () => {
-        overlay.classList.add('active');
-        drawer.classList.add('active');
-        renderCartDrawer();
-    });
+    // Floating snackbar opens cart
+    floatingBar.addEventListener('click', () => openCartDrawer());
 
     // Close methods
-    closeBtn.addEventListener('click', () => {
-        overlay.classList.remove('active');
-        drawer.classList.remove('active');
-    });
+    closeBtn.addEventListener('click', () => closeCartDrawer());
+    overlay.addEventListener('click', () => closeCartDrawer());
 
-    overlay.addEventListener('click', () => {
-        overlay.classList.remove('active');
-        drawer.classList.remove('active');
-    });
-
-    // Checkout click simulation
-    checkoutBtn.addEventListener('click', () => {
-        showToast('Processing order with Supabase...', 'success');
-        
-        setTimeout(() => {
-            showSystemAlert(`🎉 Order Confirmed!\nYour order from Dalan's Kitchen has been dispatched. Order ID: DLN-${Math.floor(1000 + Math.random() * 9000)}`);
-            appState.cart = [];
-            updateFloatingCartBar();
-            overlay.classList.remove('active');
-            drawer.classList.remove('active');
-        }, 1500);
-    });
-}
-
-// Global scope attachment for HTML button callbacks
-window.addToCart = (itemJsonString) => {
-    const item = JSON.parse(decodeURIComponent(itemJsonString));
-    
-    const existingIndex = appState.cart.findIndex(c => c.item.name === item.name);
-    if (existingIndex > -1) {
-        appState.cart[existingIndex].quantity += 1;
-    } else {
-        appState.cart.push({
-            item: item,
-            quantity: 1
+    // Empty state browse button
+    if (cartBrowseBtn) {
+        cartBrowseBtn.addEventListener('click', () => {
+            closeCartDrawer();
+            const feedSection = document.querySelector('#dashboard-screen .feed-section');
+            if (feedSection) feedSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     }
 
-    showToast(`${item.name} added to cart!`);
+    // Checkout click
+    checkoutBtn.addEventListener('click', () => {
+        checkoutBtn.disabled = true;
+        checkoutBtn.innerHTML = '<span>Processing…</span>';
+        showToast('Processing your order...', 'success');
+
+        setTimeout(() => {
+            showSystemAlert(`\ud83c\udf89 Order Confirmed!\nYour order from Dalan's Kitchen has been dispatched. Order ID: DLN-${Math.floor(1000 + Math.random() * 9000)}`);
+            appState.cart = [];
+            updateFloatingCartBar();
+            renderDalanMenu(); // refresh Add buttons
+            checkoutBtn.disabled = false;
+            checkoutBtn.innerHTML = '<span>Confirm &amp; Place Order</span><span id="checkout-total-label" class="checkout-total-label">Rs. 0.00</span>';
+            closeCartDrawer();
+        }, 1800);
+    });
+}
+
+// Global scope: Add to cart (delta = +1 default, or -1 for decrement from card stepper)
+window.addToCart = (itemJsonString, delta = 1) => {
+    const item = JSON.parse(decodeURIComponent(itemJsonString));
+    
+    const existingIndex = appState.cart.findIndex(c => c.item.id === item.id);
+    if (existingIndex > -1) {
+        appState.cart[existingIndex].quantity += delta;
+        if (appState.cart[existingIndex].quantity <= 0) {
+            appState.cart.splice(existingIndex, 1);
+        }
+    } else {
+        if (delta > 0) {
+            appState.cart.push({ item: item, quantity: 1 });
+        }
+    }
+
+    if (delta > 0) showToast(`${item.name.split(' ').slice(0,3).join(' ')}... added! \ud83d\uded2`);
     updateFloatingCartBar();
+    // Refresh the menu card button state in-place
+    refreshMenuCardButton(item);
 };
 
 window.modifyQty = (index, delta) => {
+    if (!appState.cart[index]) return;
     appState.cart[index].quantity += delta;
     if (appState.cart[index].quantity <= 0) {
         appState.cart.splice(index, 1);
     }
     updateFloatingCartBar();
     renderCartDrawer();
-
-    // Close drawers automatically if empty
-    if (appState.cart.length === 0) {
-        document.getElementById('cart-drawer-overlay').classList.remove('active');
-        document.getElementById('cart-drawer').classList.remove('active');
-    }
+    // Refresh menu card buttons too
+    renderDalanMenu();
 };
+
+// Refresh just the Add button / stepper on a single menu card without full re-render
+function refreshMenuCardButton(item) {
+    const card = document.querySelector(`.menu-item-card[data-item-id="${item.id}"]`);
+    if (!card) return;
+
+    const footerRow = card.querySelector('.item-footer-row');
+    if (!footerRow) return;
+
+    const cartEntry = appState.cart.find(c => c.item.id === item.id);
+    const qty = cartEntry ? cartEntry.quantity : 0;
+    const encodedItem = encodeURIComponent(JSON.stringify(item));
+
+    // Remove old button / stepper
+    const oldBtn = footerRow.querySelector('.btn-item-add, .item-qty-stepper');
+    if (oldBtn) oldBtn.remove();
+
+    if (qty > 0) {
+        const stepper = document.createElement('div');
+        stepper.className = 'item-qty-stepper';
+        stepper.id = `stepper-${item.id}`;
+        stepper.innerHTML = `
+            <button class="qty-btn-mini" onclick="addToCart('${encodedItem}', -1)">-</button>
+            <span class="qty-val-mini">${qty}</span>
+            <button class="qty-btn-mini" onclick="addToCart('${encodedItem}', 1)">+</button>
+        `;
+        footerRow.appendChild(stepper);
+    } else {
+        const btn = document.createElement('button');
+        btn.className = 'btn-item-add';
+        btn.id = `add-btn-${item.id}`;
+        btn.setAttribute('onclick', `addToCart('${encodedItem}')`);
+        btn.innerText = 'Add +';
+        footerRow.appendChild(btn);
+    }
+}
 
 function updateFloatingCartBar() {
     const floatingBar = document.getElementById('floating-cart-bar');
     const barQty = document.getElementById('cart-bar-qty');
     const barTotal = document.getElementById('cart-bar-total');
+    const badge = document.getElementById('header-cart-badge');
 
     if (appState.cart.length === 0) {
         floatingBar.classList.remove('active');
+        if (badge) { badge.style.display = 'none'; badge.innerText = '0'; }
         return;
     }
 
-    const totalQty = appState.cart.reduce((sum, item) => sum + item.quantity, 0);
-    const totalPrice = appState.cart.reduce((sum, item) => sum + (item.item.price * item.quantity), 0);
+    const totalQty = appState.cart.reduce((sum, c) => sum + c.quantity, 0);
+    const subtotal = appState.cart.reduce((sum, c) => sum + (c.item.price * c.quantity), 0);
+    const deliveryFee = subtotal > 500 ? 0 : 50;
+    const grandTotal = subtotal + deliveryFee + 15;
 
-    barQty.innerText = `${totalQty} item${totalQty > 1 ? 's' : ''}`;
-    barTotal.innerText = `Rs. ${totalPrice.toFixed(2)}`;
+    if (barQty) barQty.innerText = totalQty;
+    if (barTotal) barTotal.innerText = `Rs. ${grandTotal.toFixed(2)}`;
+    if (badge) { badge.style.display = 'flex'; badge.innerText = totalQty; }
+
     floatingBar.classList.add('active');
 }
 
 function renderCartDrawer() {
     const listContainer = document.getElementById('cart-items-list');
-    const subtotalText = document.getElementById('summary-subtotal');
-    const totalText = document.getElementById('summary-total');
+    const emptyState = document.getElementById('cart-empty-state');
+    const checkoutBlock = document.getElementById('cart-checkout-block');
+    const drawerItemCount = document.getElementById('drawer-item-count');
 
     listContainer.innerHTML = '';
-    
+
+    if (appState.cart.length === 0) {
+        emptyState.style.display = 'flex';
+        checkoutBlock.style.display = 'none';
+        listContainer.style.display = 'none';
+        if (drawerItemCount) drawerItemCount.innerText = '0 items';
+        return;
+    }
+
+    emptyState.style.display = 'none';
+    checkoutBlock.style.display = 'block';
+    listContainer.style.display = 'flex';
+
+    const totalQty = appState.cart.reduce((sum, c) => sum + c.quantity, 0);
+    if (drawerItemCount) drawerItemCount.innerText = `${totalQty} item${totalQty > 1 ? 's' : ''}`;
+
     let subtotal = 0;
     appState.cart.forEach((cartItem, index) => {
         const cost = cartItem.item.price * cartItem.quantity;
@@ -673,14 +849,18 @@ function renderCartDrawer() {
         const row = document.createElement('div');
         row.className = 'cart-item';
         row.innerHTML = `
-            <div>
+            <img src="${cartItem.item.image_url}" class="cart-item-img" alt="${cartItem.item.name}">
+            <div class="cart-item-details">
                 <div class="cart-item-name">${cartItem.item.name}</div>
-                <div class="cart-item-price">Rs. ${cost.toFixed(2)}</div>
-            </div>
-            <div class="cart-item-qty-controls">
-                <button class="qty-btn" onclick="modifyQty(${index}, -1)">-</button>
-                <span class="qty-val">${cartItem.quantity}</span>
-                <button class="qty-btn" onclick="modifyQty(${index}, 1)">+</button>
+                <div class="cart-item-unit-price">Rs. ${cartItem.item.price} each</div>
+                <div class="cart-item-controls-row">
+                    <div class="cart-item-qty-controls">
+                        <button class="qty-btn" onclick="modifyQty(${index}, -1)">-</button>
+                        <span class="qty-val">${cartItem.quantity}</span>
+                        <button class="qty-btn" onclick="modifyQty(${index}, 1)">+</button>
+                    </div>
+                    <div class="cart-item-price">Rs. ${cost.toFixed(2)}</div>
+                </div>
             </div>
         `;
         listContainer.appendChild(row);
@@ -689,9 +869,16 @@ function renderCartDrawer() {
     const deliveryFee = subtotal > 500 ? 0 : 50;
     const total = subtotal + deliveryFee + 15;
 
-    document.getElementById('summary-delivery').innerText = deliveryFee === 0 ? 'FREE' : `Rs. ${deliveryFee}.00`;
-    subtotalText.innerText = `Rs. ${subtotal.toFixed(2)}`;
-    totalText.innerText = `Rs. ${total.toFixed(2)}`;
+    // Free delivery note
+    const freeNote = document.getElementById('free-delivery-note');
+    if (freeNote) freeNote.style.display = deliveryFee === 0 ? 'block' : 'none';
+
+    document.getElementById('summary-delivery').innerText = deliveryFee === 0 ? 'FREE \ud83c�' : `Rs. ${deliveryFee}.00`;
+    document.getElementById('summary-subtotal').innerText = `Rs. ${subtotal.toFixed(2)}`;
+    document.getElementById('summary-total').innerText = `Rs. ${total.toFixed(2)}`;
+
+    const totalLabel = document.getElementById('checkout-total-label');
+    if (totalLabel) totalLabel.innerText = `Rs. ${total.toFixed(2)}`;
 }
 
 // ==========================================
