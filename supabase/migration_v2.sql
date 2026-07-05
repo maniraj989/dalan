@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS public.dalan_menu (
 CREATE TABLE IF NOT EXISTS public.orders (
     id               UUID          PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id          UUID          NOT NULL
-                                   REFERENCES auth.users(id) ON DELETE SET NULL,
+                                   REFERENCES public.profiles(id) ON DELETE SET NULL,
     status           TEXT          NOT NULL DEFAULT 'pending'
                                    CHECK (status IN (
                                        'pending',
