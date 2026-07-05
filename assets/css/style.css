@@ -3097,3 +3097,49 @@ body {
 [data-theme="dark"] .owner-payment-badge.esewa { background: #1A3D19; color: #7DD67C; }
 [data-theme="dark"] .global-modal-box { background: var(--card-bg); }
 [data-theme="dark"] .terms-text { color: var(--text-muted); }
+
+/* Enable scrolling on onboarding/profile completion screen on mobile devices */
+#profile-screen {
+    overflow-y: auto !important;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+#profile-screen::-webkit-scrollbar {
+    display: none;
+}
+
+#profile-screen #profile-form {
+    padding-bottom: 4rem; /* Safe padding for complete registration buttons on mobile viewport heights */
+}
+
+/* Order Cancellation Button */
+.oh-cancel-btn {
+    background: none;
+    border: 1.5px solid #E53E3E;
+    color: #E53E3E;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: 'Outfit', sans-serif;
+}
+
+.oh-cancel-btn:hover {
+    background: rgba(229, 62, 62, 0.08);
+}
+
+.oh-cancel-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Cancelled order state styles in admin */
+.owner-payment-badge.cancelled {
+    background: #FED7D7;
+    color: #9B2C2C;
+}
+
+

@@ -1,11 +1,11 @@
 /**
- * Dalan Food Delivery â€” app.js (v2)
+ * Dalan Food Delivery - app.js (v2)
  * Modules: Auth, Profile, Menu, Cart, Checkout, Order History (Realtime), Owner Dashboard
  */
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ==========================================================================
 // 1. SUPABASE CLIENT & CONFIGURATION
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ==========================================================================
 const SUPABASE_URL = "https://iobpvspmmjrrvixnmjth.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_Uzeynpiw4AQQVnHSP_15Xw_awXtAciE";
 const OWNER_EMAIL = "sharmabro275@gmail.com";  // Hardcoded owner gate
@@ -247,13 +247,13 @@ function fetchUserLocation(onSuccess) {
                 .then(r => r.json())
                 .then(d => { if (!addressInput.value) addressInput.value = d.display_name || `Lat:${lat}, Lng:${lng}`; appState.currentAddress = addressInput.value; })
                 .catch(() => { if (!addressInput.value) addressInput.value = `Lat:${lat}, Lng:${lng}`; });
-            if (gpsBtn) gpsBtn.innerText = 'âœ… GPS Located';
+            if (gpsBtn) gpsBtn.innerText = '✅ GPS Located';
             if (banner) banner.classList.add('banner-granted');
             showToast('Real-time location obtained!', 'success');
             if (onSuccess) onSuccess(lat, lng);
         },
         (err) => {
-            if (gpsBtn) gpsBtn.innerText = 'ðŸ“ Fetch GPS Coords';
+            if (gpsBtn) gpsBtn.innerText = '📍 Fetch GPS Coords';
             if (banner) banner.classList.remove('banner-granted');
             const msgs = { 1: 'Location permission denied. Allow it in browser settings.', 2: 'Location unavailable.', 3: 'Location request timed out.' };
             showToast(msgs[err.code] || 'Location error.', 'error');
@@ -284,8 +284,8 @@ function setupProfileEvents() {
     });
     if (locationAllowBtn) {
         locationAllowBtn.addEventListener('click', () => {
-            locationAllowBtn.disabled = true; locationAllowBtn.innerText = 'Locatingâ€¦';
-            fetchUserLocation(() => { locationAllowBtn.innerText = 'Granted âœ…'; });
+            locationAllowBtn.disabled = true; locationAllowBtn.innerText = 'Locating…';
+            fetchUserLocation(() => { locationAllowBtn.innerText = 'Granted ✅'; });
         });
     }
     gpsBtn.addEventListener('click', () => fetchUserLocation());
@@ -352,9 +352,9 @@ function setupProfileEvents() {
     });
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ————————————————————————————————————————————————————————
 // 9. DASHBOARD & MENU FEED
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ————————————————————————————————————————————————————————
 function setupDashboardEvents() {
     const searchInput = document.getElementById('dashboard-search');
     const categoryItems = document.querySelectorAll('.category-item');
@@ -388,12 +388,12 @@ function setupDashboardEvents() {
                 setTimeout(() => quickOrderBtn.classList.remove('btn-pulse'), 600);
                 const feedSection = document.querySelector('#dashboard-screen .feed-section');
                 if (feedSection) feedSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                showToast('ðŸ½ï¸ Add items to your cart first!');
+                showToast('🍽️ Add items to your cart first!');
             }
         });
     }
 
-    // Profile avatar â†’ opens dropdown
+    // Profile avatar -> opens dropdown
     topAvatar.addEventListener('click', (e) => {
         e.stopPropagation();
         if (!appState.isOwner) {
@@ -422,7 +422,7 @@ async function renderDalanMenu() {
     if (appState.searchQuery) filtered = filtered.filter(i => i.name.toLowerCase().includes(appState.searchQuery) || (i.description || '').toLowerCase().includes(appState.searchQuery));
 
     if (filtered.length === 0) {
-        listContainer.innerHTML = `<div style="text-align:center;padding:3rem;color:var(--text-muted);"><p style="font-size:2.5rem;margin-bottom:1rem;">ðŸ³</p><p style="font-weight:600;">No items found.</p><p style="font-size:0.8rem;margin-top:0.25rem;">Try other filters or keywords.</p></div>`;
+        listContainer.innerHTML = `<div style="text-align:center;padding:3rem;color:var(--text-muted);"><p style="font-size:2.5rem;margin-bottom:1rem;">🍲</p><p style="font-weight:600;">No items found.</p><p style="font-size:0.8rem;margin-top:0.25rem;">Try other filters or keywords.</p></div>`;
         return;
     }
 
@@ -441,19 +441,19 @@ async function renderDalanMenu() {
             <div class="item-image-wrapper">
                 <img src="${item.image_url}" class="item-image" alt="${item.name}">
                 <div class="item-meta-badges">
-                    <span class="badge-item ${item.is_veg ? 'badge-veg-green' : 'badge-veg-red'}">${item.is_veg ? 'ðŸŸ¢ Veg' : 'ðŸ”´ Non-Veg'}</span>
+                    <span class="badge-item ${item.is_veg ? 'badge-veg-green' : 'badge-veg-red'}">${item.is_veg ? '🟢 Veg' : '🔴 Non-Veg'}</span>
                 </div>
             </div>
             <div class="item-info">
                 <div class="item-title-row">
                     <h3 class="item-name">${item.name}</h3>
-                    <div class="item-rating-badge"><span>${item.rating}</span><span style="font-size:.6rem;">â˜…</span></div>
+                    <div class="item-rating-badge"><span>${item.rating}</span><span style="font-size:.6rem;">★</span></div>
                 </div>
                 <p class="item-desc">${item.description}</p>
                 <div class="item-footer-row">
                     <div class="item-price-wrapper">
                         <span class="item-price">Rs. ${item.price}</span>
-                        <span class="item-time">ðŸ•’ ${item.delivery_time_mins} mins</span>
+                        <span class="item-time">⏱️ ${item.delivery_time_mins} mins</span>
                     </div>
                     ${addBtnHtml}
                 </div>
@@ -651,7 +651,7 @@ function openCheckoutScreen() {
             <img src="${cartItem.item.image_url}" class="checkout-item-img" alt="${cartItem.item.name}">
             <div class="checkout-item-info">
                 <div class="checkout-item-name">${cartItem.item.name}</div>
-                <div class="checkout-item-qty">Ã— ${cartItem.quantity}</div>
+                <div class="checkout-item-qty">× ${cartItem.quantity}</div>
             </div>
             <div class="checkout-item-price">Rs. ${cost.toFixed(2)}</div>`;
         itemsList.appendChild(row);
@@ -659,13 +659,13 @@ function openCheckoutScreen() {
 
     // Populate delivery info from cached profile
     const profile = appState.currentUserProfile;
-    document.getElementById('checkout-address-display').innerText = profile ? (profile.delivery_address || 'â€”') : 'â€”';
-    document.getElementById('checkout-phone-display').innerText = profile ? (profile.phone || 'â€”') : 'â€”';
+    document.getElementById('checkout-address-display').innerText = profile ? (profile.delivery_address || '—') : '—';
+    document.getElementById('checkout-phone-display').innerText = profile ? (profile.phone || '—') : '—';
 
     // Price breakdown
     const { subtotal, deliveryFee, grand } = calcCartTotals();
     document.getElementById('co-subtotal').innerText = `Rs. ${subtotal.toFixed(2)}`;
-    document.getElementById('co-delivery').innerText = deliveryFee === 0 ? 'FREE ðŸŽ‰' : `Rs. ${deliveryFee.toFixed(2)}`;
+    document.getElementById('co-delivery').innerText = deliveryFee === 0 ? 'FREE 🎉' : `Rs. ${deliveryFee.toFixed(2)}`;
     document.getElementById('co-grand-total').innerText = `Rs. ${grand.toFixed(2)}`;
     document.getElementById('place-order-amount').innerText = `Rs. ${grand.toFixed(2)}`;
 
@@ -897,18 +897,22 @@ function buildOrderCard(order, showTracker) {
         'pending': { label: 'Order Received', cls: 'pending' },
         'preparing': { label: 'Preparing', cls: 'pending' },
         'out_for_delivery': { label: 'Out for Delivery', cls: 'out_for_delivery' },
-        'delivered': { label: 'Delivered âœ“', cls: 'completed' },
+        'delivered': { label: 'Delivered ✓', cls: 'completed' },
         'cancelled': { label: 'Cancelled', cls: 'pending' }
     };
     const statusInfo = statusLabels[order.status] || { label: order.status, cls: 'pending' };
 
     const itemsHtml = items.map(it => `
         <div class="oh-order-item-row">
-            <span>${it.item_name || 'Item'} Ã— ${it.quantity}</span>
+            <span>${it.item_name || 'Item'} × ${it.quantity}</span>
             <span>Rs. ${(it.price * it.quantity).toFixed(2)}</span>
         </div>`).join('');
 
     const trackerHtml = showTracker ? buildTrackerHtml(order.status, order.id) : '';
+
+    const cancelBtnHtml = (showTracker && order.status === 'pending')
+        ? `<button class="oh-cancel-btn" onclick="cancelOrder('${order.id}')">Cancel Order</button>`
+        : '';
 
     card.innerHTML = `
         <div class="oh-order-card-header">
@@ -920,7 +924,10 @@ function buildOrderCard(order, showTracker) {
             <span>Total Paid</span>
             <span>Rs. ${parseFloat(order.total_amount).toFixed(2)}</span>
         </div>
-        <span class="oh-status-badge ${statusInfo.cls}">${statusInfo.label}</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.75rem;">
+            <span class="oh-status-badge ${statusInfo.cls}">${statusInfo.label}</span>
+            ${cancelBtnHtml}
+        </div>
         ${trackerHtml}`;
     return card;
 }
@@ -1110,7 +1117,11 @@ async function loadOwnerOrders(filter) {
         if (activeFilter !== 'all') query = query.eq('status', activeFilter);
 
         const { data, error } = await query;
-        if (error) { listEl.innerHTML = '<div style="padding:1rem;color:var(--primary);font-size:0.82rem;text-align:center;">Failed to load orders.</div>'; return; }
+        if (error) { 
+            console.error("Supabase loadOwnerOrders error:", error);
+            listEl.innerHTML = `<div style="padding:1rem;color:var(--primary);font-size:0.82rem;text-align:center;">Failed to load orders: ${error.message}</div>`; 
+            return; 
+        }
         orders = data || [];
     } else {
         // Demo mock orders for owner
@@ -1746,3 +1757,34 @@ function closeTermsModal() {
 // Replace line 11 with:  const OWNER_EMAILS = ["sharmabro275@gmail.com", "yourpersonal@gmail.com"];
 // Then replace: if (session.user.email === OWNER_EMAIL)
 // With:         if (OWNER_EMAILS.includes(session.user.email))
+
+window.cancelOrder = async (orderId) => {
+    if (!confirm('Are you sure you want to cancel this order?')) return;
+
+    const cancelBtn = document.querySelector(`#oh-card-${orderId} .oh-cancel-btn`);
+    if (cancelBtn) {
+        cancelBtn.disabled = true;
+        cancelBtn.innerText = 'Cancelling…';
+    }
+
+    if (supabaseClient) {
+        const { error } = await supabaseClient
+            .from('orders')
+            .update({ status: 'cancelled' })
+            .eq('id', orderId);
+
+        if (error) {
+            showToast('Failed to cancel order: ' + error.message, 'error');
+            if (cancelBtn) {
+                cancelBtn.disabled = false;
+                cancelBtn.innerText = 'Cancel Order';
+            }
+            return;
+        }
+    }
+
+    showToast('Order cancelled successfully. ❌', 'success');
+    // Refresh customer order list
+    await loadOrderHistory();
+};
+
