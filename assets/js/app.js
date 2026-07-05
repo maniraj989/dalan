@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Dalan Food Delivery â€” app.js (v2)
  * Modules: Auth, Profile, Menu, Cart, Checkout, Order History (Realtime), Owner Dashboard
  */
@@ -84,7 +84,20 @@ function navigateTo(screenId) {
 document.addEventListener('DOMContentLoaded', async () => {
     if (supabaseClient) {
         await checkProfileAndNavigate();
+        
+        // Listen to Auth state changes to automatically transition dashboard view instantly
+        supabaseClient.auth.onAuthStateChange(async (event, session) => {
+            if (event === 'SIGNED_IN' && session) {
+                appState.currentUser = session.user;
+                if (session.user.email === 'sharmabro275@gmail.com') {
+                    showAdminDashboard();
+                } else {
+                    await checkProfileAndNavigate();
+                }
+            }
+        });
     }
+
 
     setTimeout(() => {
         const active = document.querySelector('.screen.active');
@@ -171,12 +184,11 @@ async function checkProfileAndNavigate() {
     appState.currentUser = session.user;
 
     // Detect owner by email before anything else
-    if (session.user.email === OWNER_EMAIL) {
-        appState.isOwner = true;
-        navigateTo('owner-dashboard');
-        initOwnerDashboard();
+    if (session.user.email === 'sharmabro275@gmail.com') {
+        showAdminDashboard();
         return;
     }
+
 
     // Regular customer â€” fetch profile
     const { data: profile, error } = await supabaseClient
@@ -202,6 +214,13 @@ async function checkProfileAndNavigate() {
         renderDalanMenu();
     }
 }
+
+function showAdminDashboard() {
+    appState.isOwner = true;
+    navigateTo('owner-dashboard');
+    initOwnerDashboard();
+}
+
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // 8. PROFILE COMPLETION SCREEN
