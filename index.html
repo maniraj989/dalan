@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dalan - Nepalese Restaurant &amp; Food Delivery</title>
+    <meta name="description"
+        content="Dalan — Authentic Nepalese food delivery. Order momos, thali sets, chai and more. Fast delivery across Kathmandu valley.">
     <!-- Stylesheet -->
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -102,8 +104,8 @@
                         <span
                             style="display:flex; align-items:center; justify-content:center; padding: 0 0.8rem; background: var(--bg-app); border-right: 1px solid var(--border-color); font-weight:600; color: var(--text-dark);">🇳🇵
                             +977</span>
-                        <input type="tel" id="profile-phone" class="phone-input" placeholder="98XXXXXXXX"
-                            maxlength="10" required>
+                        <input type="tel" id="profile-phone" class="phone-input" placeholder="98XXXXXXXX" maxlength="10"
+                            required>
                     </div>
                 </div>
 
@@ -158,10 +160,43 @@
                         <span id="header-cart-badge" class="header-cart-badge" style="display:none;">0</span>
                     </button>
 
-                    <!-- Profile Avatar -->
-                    <img id="profile-avatar-trigger"
-                        src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=60"
-                        class="profile-avatar" alt="Avatar">
+                    <!-- Profile Avatar — opens dropdown menu -->
+                    <div id="profile-dropdown-wrapper" class="profile-dropdown-wrapper">
+                        <img id="profile-avatar-trigger"
+                            src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=60"
+                            class="profile-avatar" alt="Avatar">
+                        <!-- Dropdown Menu -->
+                        <div id="profile-dropdown" class="profile-dropdown" aria-hidden="true">
+                            <div class="profile-dropdown-user">
+                                <img id="dropdown-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=60" class="dropdown-avatar-img" alt="">
+                                <div class="dropdown-user-info">
+                                    <span id="dropdown-user-name" class="dropdown-user-name">Loading…</span>
+                                    <span id="dropdown-user-email" class="dropdown-user-email">—</span>
+                                </div>
+                            </div>
+                            <div class="profile-dropdown-divider"></div>
+                            <button class="profile-dropdown-item" id="dropdown-edit-profile">
+                                <span class="dropdown-item-icon">✏️</span>
+                                <span>Edit Profile</span>
+                                <svg class="dropdown-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </button>
+                            <button class="profile-dropdown-item" id="dropdown-my-orders">
+                                <span class="dropdown-item-icon">📦</span>
+                                <span>My Orders</span>
+                                <svg class="dropdown-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </button>
+                            <button class="profile-dropdown-item" id="dropdown-terms">
+                                <span class="dropdown-item-icon">📋</span>
+                                <span>Terms &amp; Privacy</span>
+                                <svg class="dropdown-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </button>
+                            <div class="profile-dropdown-divider"></div>
+                            <button class="profile-dropdown-item dropdown-item-danger" id="dropdown-sign-out">
+                                <span class="dropdown-item-icon">🚪</span>
+                                <span>Sign Out</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Search box -->
@@ -172,7 +207,7 @@
                 </div>
             </div>
 
-            <!-- ── Scrollable body ── scrolls independently, cart bar stays below -->
+            <!-- ── Scrollable body ── -->
             <div class="dashboard-scroll-body">
 
                 <!-- Banner Carousel / Promotions -->
@@ -183,8 +218,7 @@
                             <h3 class="promo-title">Chai &amp; Momos Combo</h3>
                             <p class="promo-desc">Get free Masala Tea with every Buff Momo order today!</p>
                         </div>
-                        <div class="promo-card"
-                            style="background: linear-gradient(135deg, #248046 0%, #2E221E 100%);">
+                        <div class="promo-card" style="background: linear-gradient(135deg, #248046 0%, #2E221E 100%);">
                             <span class="promo-badge">Delivery Bonus</span>
                             <h3 class="promo-title">Free Delivery</h3>
                             <p class="promo-desc">Free home delivery on orders exceeding Rs. 500 across Kathmandu
@@ -338,6 +372,458 @@
             </div>
         </div>
 
+        <!-- ==========================================
+             6. CHECKOUT PAYMENT SCREEN  [MODULE 1]
+             ========================================== -->
+        <section id="checkout-screen" class="screen">
+
+            <!-- Header -->
+            <div class="screen-header">
+                <button id="checkout-back-btn" class="screen-back-btn" aria-label="Go Back">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <h2 class="screen-header-title">Checkout</h2>
+                <div style="width:40px;"></div>
+            </div>
+
+            <div class="checkout-scroll-body">
+
+                <!-- Order Summary -->
+                <div class="checkout-section">
+                    <h3 class="checkout-section-title">🧾 Order Summary</h3>
+                    <div id="checkout-items-list" class="checkout-items-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Delivery Details -->
+                <div class="checkout-section">
+                    <h3 class="checkout-section-title">📍 Delivery Details</h3>
+                    <div class="checkout-delivery-card">
+                        <div class="checkout-delivery-row">
+                            <span class="checkout-delivery-label">Delivering to</span>
+                            <span id="checkout-address-display" class="checkout-delivery-value">—</span>
+                        </div>
+                        <div class="checkout-delivery-row">
+                            <span class="checkout-delivery-label">Mobile</span>
+                            <span id="checkout-phone-display" class="checkout-delivery-value">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price Breakdown -->
+                <div class="checkout-section">
+                    <h3 class="checkout-section-title">💰 Price Breakdown</h3>
+                    <div class="checkout-price-card">
+                        <div class="checkout-price-row">
+                            <span>Subtotal</span>
+                            <span id="co-subtotal">Rs. 0.00</span>
+                        </div>
+                        <div class="checkout-price-row">
+                            <span>🛵 Delivery</span>
+                            <span id="co-delivery">Rs. 50.00</span>
+                        </div>
+                        <div class="checkout-price-row">
+                            <span>Taxes &amp; Packaging</span>
+                            <span>Rs. 15.00</span>
+                        </div>
+                        <div class="checkout-price-row checkout-price-total">
+                            <span>Grand Total</span>
+                            <span id="co-grand-total">Rs. 65.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="checkout-section">
+                    <h3 class="checkout-section-title">💳 Select Payment Method</h3>
+
+                    <!-- COD Option -->
+                    <div id="payment-cod" class="payment-option-card active" data-method="cod">
+                        <div class="payment-option-icon payment-icon-cod">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="6" width="20" height="12" rx="2" />
+                                <circle cx="12" cy="12" r="3" />
+                                <path d="M6 12h.01M18 12h.01" />
+                            </svg>
+                        </div>
+                        <div class="payment-option-info">
+                            <span class="payment-option-name">Cash on Delivery</span>
+                            <span class="payment-option-sub">Pay in cash when your order arrives</span>
+                        </div>
+                        <div class="payment-option-check">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- eSewa Option -->
+                    <div id="payment-esewa" class="payment-option-card" data-method="esewa">
+                        <div class="payment-option-icon payment-icon-esewa">
+                            <!-- eSewa logo mark -->
+                            <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+                                <rect width="52" height="52" rx="12" fill="#60BB46" />
+                                <text x="50%" y="53%" dominant-baseline="middle" text-anchor="middle"
+                                    font-size="17" font-weight="900" fill="white"
+                                    font-family="Arial, sans-serif">eSewa</text>
+                            </svg>
+                        </div>
+                        <div class="payment-option-info">
+                            <span class="payment-option-name">Pay via eSewa</span>
+                            <span class="payment-option-sub">Nepal's #1 digital wallet · Fast &amp; Secure</span>
+                        </div>
+                        <div class="payment-option-check">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Optional Notes -->
+                <div class="checkout-section" style="padding-bottom: 120px;">
+                    <h3 class="checkout-section-title">📝 Delivery Notes <span
+                            style="font-weight:400; font-size:0.75rem; color:var(--text-muted);">(optional)</span></h3>
+                    <textarea id="checkout-notes" class="checkout-notes-input"
+                        placeholder="Any special instructions? e.g. 'Leave at gate', 'Extra chutney please'..."
+                        rows="3"></textarea>
+                </div>
+
+            </div><!-- /.checkout-scroll-body -->
+
+            <!-- Fixed Place Order CTA -->
+            <div class="checkout-cta-bar">
+                <button id="place-order-btn" class="btn-place-order">
+                    <span id="place-order-icon">🍽️</span>
+                    <span id="place-order-label">Place Order</span>
+                    <span id="place-order-amount" class="place-order-amount">Rs. 0.00</span>
+                </button>
+            </div>
+
+            <!-- eSewa Payment Interstitial Overlay -->
+            <div id="esewa-overlay" class="phonepe-overlay" style="display:none;">
+                <div class="phonepe-modal esewa-modal">
+                    <div class="phonepe-logo-wrap">
+                        <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
+                            <rect width="72" height="72" rx="16" fill="#60BB46" />
+                            <text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle"
+                                font-size="22" font-weight="900" fill="white"
+                                font-family="Arial, sans-serif">eSewa</text>
+                        </svg>
+                    </div>
+                    <h3 class="phonepe-modal-title esewa-title">eSewa Payment</h3>
+                    <p class="phonepe-modal-sub esewa-sub">Connecting to eSewa gateway…</p>
+                    <div class="phonepe-spinner esewa-spinner"></div>
+                    <p class="phonepe-modal-note">Do not press Back. Your payment is being securely processed by eSewa.</p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ==========================================
+             7. ORDER HISTORY & LIVE STATUS  [MODULE 2]
+             ========================================== -->
+        <section id="order-history-screen" class="screen">
+
+            <!-- Header -->
+            <div class="screen-header">
+                <button id="order-history-back-btn" class="screen-back-btn" aria-label="Go Back">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <h2 class="screen-header-title">My Orders</h2>
+                <div style="width:40px;"></div>
+            </div>
+
+            <!-- Tab Bar -->
+            <div class="order-history-tabs">
+                <button id="oh-tab-active" class="oh-tab active" data-tab="active">
+                    🔴 Active
+                    <span id="oh-active-badge" class="oh-tab-badge" style="display:none;">0</span>
+                </button>
+                <button id="oh-tab-past" class="oh-tab" data-tab="past">📋 Past Orders</button>
+            </div>
+
+            <!-- Active Orders Tab Content -->
+            <div id="oh-active-pane" class="oh-pane active">
+                <div id="oh-active-list" class="oh-list">
+                    <!-- Populated by JS -->
+                </div>
+                <!-- Empty State -->
+                <div id="oh-active-empty" class="oh-empty-state" style="display:none;">
+                    <div class="oh-empty-icon">🟢</div>
+                    <p class="oh-empty-title">No active orders</p>
+                    <p class="oh-empty-sub">Your current orders will appear here with live tracking.</p>
+                    <button onclick="navigateTo('dashboard-screen')" class="btn-primary"
+                        style="margin-top:1rem; width:auto; padding:0.75rem 2rem;">Browse Menu</button>
+                </div>
+            </div>
+
+            <!-- Past Orders Tab Content -->
+            <div id="oh-past-pane" class="oh-pane" style="display:none;">
+                <div id="oh-past-list" class="oh-list">
+                    <!-- Populated by JS -->
+                </div>
+                <!-- Empty State -->
+                <div id="oh-past-empty" class="oh-empty-state" style="display:none;">
+                    <div class="oh-empty-icon">🗂️</div>
+                    <p class="oh-empty-title">No past orders yet</p>
+                    <p class="oh-empty-sub">Your completed orders will be archived here.</p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ==========================================
+             8. OWNER / ADMIN DASHBOARD  [MODULE 3]
+             ========================================== -->
+        <section id="owner-dashboard" class="screen">
+
+            <!-- Owner Header -->
+            <div class="owner-header">
+                <div class="owner-header-left">
+                    <img src="assets/images/logo.jpeg" class="owner-header-logo" alt="Dalan Logo">
+                    <div>
+                        <span class="owner-header-title">Command Center</span>
+                        <span class="owner-header-sub">दलान Owner Panel</span>
+                    </div>
+                </div>
+                <div class="owner-header-actions">
+                    <span id="owner-new-order-badge" class="owner-new-badge" style="display:none;">0 New</span>
+                    <button id="owner-logout-btn" class="owner-logout-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                            <polyline points="16 17 21 12 16 7" />
+                            <line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
+                        Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Owner Tab Bar -->
+            <div class="owner-tab-bar">
+                <button id="owner-tab-orders" class="owner-tab active" data-tab="orders">
+                    📦 Live Orders
+                    <span id="owner-live-count" class="owner-tab-count" style="display:none;">0</span>
+                </button>
+                <button id="owner-tab-menu" class="owner-tab" data-tab="menu">
+                    🍽️ Menu Manager
+                </button>
+            </div>
+
+            <!-- Live Orders Pane -->
+            <div id="owner-orders-pane" class="owner-pane active">
+
+                <!-- Filter strip -->
+                <div class="owner-filter-strip">
+                    <button class="owner-filter-btn active" data-filter="all"
+                        onclick="filterOwnerOrders('all', this)">All</button>
+                    <button class="owner-filter-btn" data-filter="pending"
+                        onclick="filterOwnerOrders('pending', this)">Received</button>
+                    <button class="owner-filter-btn" data-filter="out_for_delivery"
+                        onclick="filterOwnerOrders('out_for_delivery', this)">Delivery</button>
+                    <button class="owner-filter-btn" data-filter="delivered"
+                        onclick="filterOwnerOrders('delivered', this)">Completed</button>
+                </div>
+
+                <div id="owner-orders-list" class="owner-orders-list">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="owner-orders-empty" class="oh-empty-state" style="display:none;">
+                    <div class="oh-empty-icon">📭</div>
+                    <p class="oh-empty-title">No orders yet</p>
+                    <p class="oh-empty-sub">New customer orders will appear here in real-time.</p>
+                </div>
+            </div>
+
+            <!-- Menu Manager Pane -->
+            <div id="owner-menu-pane" class="owner-pane" style="display:none;">
+
+                <!-- Add New Item Form -->
+                <div class="menu-crud-form-wrapper">
+                    <div class="menu-crud-form-header" id="menu-form-toggle-btn">
+                        <span>➕ Add New Menu Item</span>
+                        <svg id="menu-form-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                            style="transition:transform 0.3s;">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+
+                    <form id="menu-crud-form" class="menu-crud-form" style="display:none;">
+                        <input type="hidden" id="menu-edit-id" value="">
+
+                        <div class="form-group">
+                            <label class="form-label" for="menu-item-name">Dish Name *</label>
+                            <input type="text" id="menu-item-name" class="form-input"
+                                placeholder="e.g. Special Buff Momo" required>
+                        </div>
+
+                        <div class="menu-form-row">
+                            <div class="form-group" style="flex:1;">
+                                <label class="form-label" for="menu-item-category">Category *</label>
+                                <select id="menu-item-category" class="form-input form-select" required>
+                                    <option value="">Select...</option>
+                                    <option value="Momo">🥟 Momo</option>
+                                    <option value="Traditional Platters">🍛 Traditional Platters</option>
+                                    <option value="Beverages">☕ Beverages</option>
+                                    <option value="Desserts">🍰 Desserts</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex:1;">
+                                <label class="form-label" for="menu-item-price">Price (Rs.) *</label>
+                                <input type="number" id="menu-item-price" class="form-input" placeholder="e.g. 150"
+                                    min="0" step="0.01" required>
+                            </div>
+                        </div>
+
+                        <div class="menu-form-row">
+                            <div class="form-group" style="flex:1;">
+                                <label class="form-label" for="menu-item-delivery-time">Est. Delivery (mins)</label>
+                                <input type="number" id="menu-item-delivery-time" class="form-input" placeholder="20"
+                                    min="1" value="20">
+                            </div>
+                            <div class="form-group" style="flex:1;">
+                                <label class="form-label">Dietary Type</label>
+                                <div class="veg-toggle-wrapper">
+                                    <label class="veg-toggle">
+                                        <input type="checkbox" id="menu-item-isveg" checked>
+                                        <span class="veg-toggle-slider"></span>
+                                    </label>
+                                    <span id="veg-toggle-label" class="veg-toggle-label">🟢 Veg</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="menu-item-desc">Description</label>
+                            <textarea id="menu-item-desc" class="form-input" rows="3"
+                                placeholder="Describe the dish..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Food Photo</label>
+                            <div class="menu-photo-uploader" id="menu-photo-drop-area">
+                                <div class="menu-photo-preview-wrap">
+                                    <img id="menu-photo-preview" src="" alt=""
+                                        style="display:none; width:100%; height:100%; object-fit:cover; border-radius:8px;">
+                                    <div id="menu-photo-placeholder" class="menu-photo-placeholder">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                            <polyline points="17 8 12 3 7 8" />
+                                            <line x1="12" y1="3" x2="12" y2="15" />
+                                        </svg>
+                                        <span>Tap to upload photo</span>
+                                    </div>
+                                </div>
+                                <input type="file" id="menu-item-photo" accept="image/*" style="display:none;">
+                            </div>
+                        </div>
+
+                        <div style="display:flex; gap:0.75rem;">
+                            <button type="button" id="menu-form-cancel-btn" class="btn-secondary"
+                                style="flex:1;">Cancel</button>
+                            <button type="submit" id="menu-form-submit-btn" class="btn-primary" style="flex:2;">
+                                <span id="menu-submit-label">Add to Menu</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Existing Menu Items List -->
+                <div class="owner-menu-list-header">
+                    <span>Current Menu</span>
+                    <span id="owner-menu-count" class="owner-menu-count-badge">0 items</span>
+                </div>
+                <div id="owner-menu-list" class="owner-menu-list">
+                    <!-- Populated by JS -->
+                </div>
+
+            </div><!-- /.owner-menu-pane -->
+
+        </section><!-- /#owner-dashboard -->
+
+    </div><!-- /.app-container -->
+
+    <!-- ==========================================
+         GLOBAL MODALS (outside .app-container so they overlay everything)
+         ========================================== -->
+
+    <!-- Edit Profile Modal -->
+    <div id="edit-profile-modal" class="global-modal-overlay" aria-hidden="true" style="display:none;">
+        <div class="global-modal-box">
+            <div class="global-modal-header">
+                <h3 class="global-modal-title">✏️ Edit Profile</h3>
+                <button id="edit-profile-modal-close" class="global-modal-close">&times;</button>
+            </div>
+            <form id="edit-profile-form" class="global-modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="edit-name">Full Name</label>
+                    <input type="text" id="edit-name" class="form-input" placeholder="e.g. Ram Bahadur" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="edit-phone">Nepal Mobile Number</label>
+                    <div class="phone-input-wrapper">
+                        <span style="display:flex;align-items:center;padding:0 0.8rem;background:var(--bg-app);border-right:1px solid var(--border-color);font-weight:600;color:var(--text-dark);">🇳🇵 +977</span>
+                        <input type="tel" id="edit-phone" class="phone-input" placeholder="98XXXXXXXX" maxlength="10" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="edit-address">Delivery Address</label>
+                    <input type="text" id="edit-address" class="form-input" placeholder="e.g. Jawalakhel, Lalitpur" required>
+                </div>
+                <div style="display:flex;gap:0.75rem;margin-top:0.5rem;">
+                    <button type="button" id="edit-profile-cancel-btn" class="btn-secondary" style="flex:1;">Cancel</button>
+                    <button type="submit" id="edit-profile-save-btn" class="btn-primary" style="flex:2;">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Terms & Privacy Modal -->
+    <div id="terms-modal" class="global-modal-overlay" aria-hidden="true" style="display:none;">
+        <div class="global-modal-box">
+            <div class="global-modal-header">
+                <h3 class="global-modal-title">📋 Terms &amp; Privacy</h3>
+                <button id="terms-modal-close" class="global-modal-close">&times;</button>
+            </div>
+            <div class="global-modal-body global-modal-scroll">
+                <h4 class="terms-section-heading">About Dalan</h4>
+                <p class="terms-text">Dalan is a single-vendor Nepalese restaurant and food delivery app operated from Kathmandu Valley, Nepal. We specialize in authentic Thakali Thali sets, fresh Buff Momos, artisan chai, and traditional Nepali desserts.</p>
+
+                <h4 class="terms-section-heading">Terms of Service</h4>
+                <p class="terms-text">By using the Dalan app, you agree to provide accurate delivery information. Orders once placed cannot be cancelled after they enter the 'Preparing' stage. Dalan reserves the right to refuse service in case of fraudulent activity.</p>
+
+                <h4 class="terms-section-heading">Payment Policy</h4>
+                <p class="terms-text">We accept Cash on Delivery (COD) and eSewa digital payments. eSewa payments are processed securely through eSewa's official gateway. Dalan does not store any payment credentials.</p>
+
+                <h4 class="terms-section-heading">Delivery Policy</h4>
+                <p class="terms-text">Delivery is available within Kathmandu Valley. Standard delivery fee is Rs. 50. Orders above Rs. 500 qualify for free delivery. Estimated delivery time is 15–30 minutes depending on your location.</p>
+
+                <h4 class="terms-section-heading">Privacy Policy</h4>
+                <p class="terms-text">Your name, phone number, email, and GPS location are collected solely for the purpose of processing and delivering your order. We do not sell or share your personal data with any third parties. Data is stored securely on Supabase's encrypted infrastructure.</p>
+
+                <h4 class="terms-section-heading">Contact Us</h4>
+                <p class="terms-text">For support, complaints, or feedback, reach us at: <strong>dalan.kitchen@gmail.com</strong> or call <strong>+977-9801234567</strong>.</p>
+
+                <p class="terms-text" style="margin-top:1.5rem;font-size:0.75rem;color:var(--text-muted);">Last updated: July 2025 · Dalan Restaurant, Kathmandu, Nepal.</p>
+            </div>
+        </div>
     </div>
 
     <!-- Supabase JS Library -->
