@@ -168,7 +168,9 @@
                         <!-- Dropdown Menu -->
                         <div id="profile-dropdown" class="profile-dropdown" aria-hidden="true">
                             <div class="profile-dropdown-user">
-                                <img id="dropdown-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=60" class="dropdown-avatar-img" alt="">
+                                <img id="dropdown-avatar"
+                                    src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=60"
+                                    class="dropdown-avatar-img" alt="">
                                 <div class="dropdown-user-info">
                                     <span id="dropdown-user-name" class="dropdown-user-name">Loading…</span>
                                     <span id="dropdown-user-email" class="dropdown-user-email">—</span>
@@ -178,17 +180,29 @@
                             <button class="profile-dropdown-item" id="dropdown-edit-profile">
                                 <span class="dropdown-item-icon">✏️</span>
                                 <span>Edit Profile</span>
-                                <svg class="dropdown-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                <svg class="dropdown-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
                             </button>
                             <button class="profile-dropdown-item" id="dropdown-my-orders">
                                 <span class="dropdown-item-icon">📦</span>
                                 <span>My Orders</span>
-                                <svg class="dropdown-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                <svg class="dropdown-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
                             </button>
                             <button class="profile-dropdown-item" id="dropdown-terms">
                                 <span class="dropdown-item-icon">📋</span>
                                 <span>Terms &amp; Privacy</span>
-                                <svg class="dropdown-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                <svg class="dropdown-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
                             </button>
                             <div class="profile-dropdown-divider"></div>
                             <button class="profile-dropdown-item dropdown-item-danger" id="dropdown-sign-out">
@@ -205,10 +219,61 @@
                     <input type="text" id="dashboard-search" class="search-input"
                         placeholder="Search Dalan's kitchen...">
                 </div>
+
+                <!-- Desktop Sidebar Categories (Desktop Only) -->
+                <div class="sidebar-categories">
+                    <h3 class="sidebar-section-title">What are you craving?</h3>
+                    <div class="sidebar-category-list">
+                        <div class="category-item" data-category="All">
+                            <div class="category-circle" style="border-color: var(--primary);">
+                                <span class="category-icon">🍽️</span>
+                            </div>
+                            <span class="category-name" style="color: var(--primary);">All</span>
+                        </div>
+                        <div class="category-item" data-category="Momo">
+                            <div class="category-circle">
+                                <span class="category-icon">🥟</span>
+                            </div>
+                            <span class="category-name">Momo</span>
+                        </div>
+                        <div class="category-item" data-category="Traditional Platters">
+                            <div class="category-circle">
+                                <span class="category-icon">🍛</span>
+                            </div>
+                            <span class="category-name">Platters</span>
+                        </div>
+                        <div class="category-item" data-category="Beverages">
+                            <div class="category-circle">
+                                <span class="category-icon">☕</span>
+                            </div>
+                            <span class="category-name">Beverages</span>
+                        </div>
+                        <div class="category-item" data-category="Desserts">
+                            <div class="category-circle">
+                                <span class="category-icon">🍰</span>
+                            </div>
+                            <span class="category-name">Desserts</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- ── Scrollable body ── -->
             <div class="dashboard-scroll-body">
+
+                <!-- Hero Section (Desktop Only) -->
+                <div class="hero-section">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Authentic Taste, <br><span class="hero-highlight">Delivered to Your
+                                Doorstep</span></h1>
+                        <p class="hero-subtitle">Experience the rich flavors of traditional Nepalese cuisine — momos,
+                            thalis, and local treats delivered fresh to you across Kathmandu Valley.</p>
+                        <button id="hero-view-menu-btn" class="btn-primary hero-btn">View Menu</button>
+                    </div>
+                    <div class="hero-image-wrap">
+                        <img src="assets/images/hero.png" alt="Dalan Feast" class="hero-image">
+                    </div>
+                </div>
 
                 <!-- Banner Carousel / Promotions -->
                 <div class="promo-carousel-container">
@@ -469,9 +534,8 @@
                             <!-- eSewa logo mark -->
                             <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
                                 <rect width="52" height="52" rx="12" fill="#60BB46" />
-                                <text x="50%" y="53%" dominant-baseline="middle" text-anchor="middle"
-                                    font-size="17" font-weight="900" fill="white"
-                                    font-family="Arial, sans-serif">eSewa</text>
+                                <text x="50%" y="53%" dominant-baseline="middle" text-anchor="middle" font-size="17"
+                                    font-weight="900" fill="white" font-family="Arial, sans-serif">eSewa</text>
                             </svg>
                         </div>
                         <div class="payment-option-info">
@@ -513,15 +577,15 @@
                     <div class="phonepe-logo-wrap">
                         <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
                             <rect width="72" height="72" rx="16" fill="#60BB46" />
-                            <text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle"
-                                font-size="22" font-weight="900" fill="white"
-                                font-family="Arial, sans-serif">eSewa</text>
+                            <text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" font-size="22"
+                                font-weight="900" fill="white" font-family="Arial, sans-serif">eSewa</text>
                         </svg>
                     </div>
                     <h3 class="phonepe-modal-title esewa-title">eSewa Payment</h3>
                     <p class="phonepe-modal-sub esewa-sub">Connecting to eSewa gateway…</p>
                     <div class="phonepe-spinner esewa-spinner"></div>
-                    <p class="phonepe-modal-note">Do not press Back. Your payment is being securely processed by eSewa.</p>
+                    <p class="phonepe-modal-note">Do not press Back. Your payment is being securely processed by eSewa.
+                    </p>
                 </div>
             </div>
 
@@ -781,17 +845,23 @@
                 <div class="form-group">
                     <label class="form-label" for="edit-phone">Nepal Mobile Number</label>
                     <div class="phone-input-wrapper">
-                        <span style="display:flex;align-items:center;padding:0 0.8rem;background:var(--bg-app);border-right:1px solid var(--border-color);font-weight:600;color:var(--text-dark);">🇳🇵 +977</span>
-                        <input type="tel" id="edit-phone" class="phone-input" placeholder="98XXXXXXXX" maxlength="10" required>
+                        <span
+                            style="display:flex;align-items:center;padding:0 0.8rem;background:var(--bg-app);border-right:1px solid var(--border-color);font-weight:600;color:var(--text-dark);">🇳🇵
+                            +977</span>
+                        <input type="tel" id="edit-phone" class="phone-input" placeholder="98XXXXXXXX" maxlength="10"
+                            required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="edit-address">Delivery Address</label>
-                    <input type="text" id="edit-address" class="form-input" placeholder="e.g. Jawalakhel, Lalitpur" required>
+                    <input type="text" id="edit-address" class="form-input" placeholder="e.g. Jawalakhel, Lalitpur"
+                        required>
                 </div>
                 <div style="display:flex;gap:0.75rem;margin-top:0.5rem;">
-                    <button type="button" id="edit-profile-cancel-btn" class="btn-secondary" style="flex:1;">Cancel</button>
-                    <button type="submit" id="edit-profile-save-btn" class="btn-primary" style="flex:2;">Save Changes</button>
+                    <button type="button" id="edit-profile-cancel-btn" class="btn-secondary"
+                        style="flex:1;">Cancel</button>
+                    <button type="submit" id="edit-profile-save-btn" class="btn-primary" style="flex:2;">Save
+                        Changes</button>
                 </div>
             </form>
         </div>
@@ -806,24 +876,36 @@
             </div>
             <div class="global-modal-body global-modal-scroll">
                 <h4 class="terms-section-heading">About Dalan</h4>
-                <p class="terms-text">Dalan is a single-vendor Nepalese restaurant and food delivery app operated from Kathmandu Valley, Nepal. We specialize in authentic Thakali Thali sets, fresh Buff Momos, artisan chai, and traditional Nepali desserts.</p>
+                <p class="terms-text">Dalan is a single-vendor Nepalese restaurant and food delivery app operated from
+                    Kathmandu Valley, Nepal. We specialize in authentic Thakali Thali sets, fresh Buff Momos, artisan
+                    chai, and traditional Nepali desserts.</p>
 
                 <h4 class="terms-section-heading">Terms of Service</h4>
-                <p class="terms-text">By using the Dalan app, you agree to provide accurate delivery information. Orders once placed cannot be cancelled after they enter the 'Preparing' stage. Dalan reserves the right to refuse service in case of fraudulent activity.</p>
+                <p class="terms-text">By using the Dalan app, you agree to provide accurate delivery information. Orders
+                    once placed cannot be cancelled after they enter the 'Preparing' stage. Dalan reserves the right to
+                    refuse service in case of fraudulent activity.</p>
 
                 <h4 class="terms-section-heading">Payment Policy</h4>
-                <p class="terms-text">We accept Cash on Delivery (COD) and eSewa digital payments. eSewa payments are processed securely through eSewa's official gateway. Dalan does not store any payment credentials.</p>
+                <p class="terms-text">We accept Cash on Delivery (COD) and eSewa digital payments. eSewa payments are
+                    processed securely through eSewa's official gateway. Dalan does not store any payment credentials.
+                </p>
 
                 <h4 class="terms-section-heading">Delivery Policy</h4>
-                <p class="terms-text">Delivery is available within Kathmandu Valley. Standard delivery fee is Rs. 50. Orders above Rs. 500 qualify for free delivery. Estimated delivery time is 15–30 minutes depending on your location.</p>
+                <p class="terms-text">Delivery is available within Kathmandu Valley. Standard delivery fee is Rs. 50.
+                    Orders above Rs. 500 qualify for free delivery. Estimated delivery time is 15–30 minutes depending
+                    on your location.</p>
 
                 <h4 class="terms-section-heading">Privacy Policy</h4>
-                <p class="terms-text">Your name, phone number, email, and GPS location are collected solely for the purpose of processing and delivering your order. We do not sell or share your personal data with any third parties. Data is stored securely on Supabase's encrypted infrastructure.</p>
+                <p class="terms-text">Your name, phone number, email, and GPS location are collected solely for the
+                    purpose of processing and delivering your order. We do not sell or share your personal data with any
+                    third parties. Data is stored securely on Supabase's encrypted infrastructure.</p>
 
                 <h4 class="terms-section-heading">Contact Us</h4>
-                <p class="terms-text">For support, complaints, or feedback, reach us at: <strong>dalan.kitchen@gmail.com</strong> or call <strong>+977-9801234567</strong>.</p>
+                <p class="terms-text">For support, complaints, or feedback, reach us at:
+                    <strong>dalan.kitchen@gmail.com</strong> or call <strong>+977-9801234567</strong>.</p>
 
-                <p class="terms-text" style="margin-top:1.5rem;font-size:0.75rem;color:var(--text-muted);">Last updated: July 2025 · Dalan Restaurant, Kathmandu, Nepal.</p>
+                <p class="terms-text" style="margin-top:1.5rem;font-size:0.75rem;color:var(--text-muted);">Last updated:
+                    July 2025 · Dalan Restaurant, Kathmandu, Nepal.</p>
             </div>
         </div>
     </div>

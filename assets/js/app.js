@@ -361,6 +361,14 @@ function setupDashboardEvents() {
     const topAvatar = document.getElementById('profile-avatar-trigger');
     const quickOrderBtn = document.getElementById('quick-order-btn');
 
+    const heroBtn = document.getElementById('hero-view-menu-btn');
+    if (heroBtn) {
+        heroBtn.addEventListener('click', () => {
+            const feedSection = document.querySelector('#dashboard-screen .feed-section');
+            if (feedSection) feedSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    }
+
     searchInput.addEventListener('input', (e) => {
         appState.searchQuery = e.target.value.toLowerCase().trim();
         renderDalanMenu();

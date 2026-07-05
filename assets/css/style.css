@@ -3142,4 +3142,505 @@ body {
     color: #9B2C2C;
 }
 
+/* Mobile hiding rules for desktop-only elements */
+.sidebar-categories {
+    display: none;
+}
+.hero-section {
+    display: none;
+}
+
+/* ==========================================================================
+   RESPONSIVE LAYOUT TRANSFORMATION (Desktop > 1024px)
+   ========================================================================== */
+@media (min-width: 1025px) {
+    /* 1. App container full-width adjustments */
+    body {
+        align-items: stretch;
+    }
+
+    .app-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 100vh !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
+
+    .screen {
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    /* 2. Dashboard screen grid layout */
+    #dashboard-screen {
+        display: grid !important;
+        grid-template-columns: 280px 1fr !important;
+        grid-template-rows: 1fr !important;
+        height: 100vh !important;
+    }
+
+    .header-sticky {
+        grid-column: 1 !important;
+        height: 100vh !important;
+        border-right: 1px solid var(--border-color) !important;
+        border-bottom: none !important;
+        position: relative !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1.5rem !important;
+        padding: 2rem 1.5rem !important;
+        background-color: var(--card-bg) !important;
+    }
+
+    .header-top {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 1.5rem !important;
+        width: 100% !important;
+        margin-bottom: 0 !important;
+    }
+
+    .header-logo-brand {
+        width: 100% !important;
+    }
+
+    .header-logo {
+        width: 44px !important;
+        height: 44px !important;
+    }
+
+    .header-title-text {
+        font-size: 1.5rem !important;
+    }
+
+    .quick-order-btn {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 0.75rem 1rem !important;
+        border-radius: var(--radius-md) !important;
+    }
+
+    /* Profile Avatar & dropdown in sidebar */
+    .profile-dropdown-wrapper {
+        width: 100% !important;
+        justify-content: flex-start !important;
+        margin-top: 0.5rem !important;
+    }
+
+    .profile-dropdown {
+        left: 0 !important;
+        right: auto !important;
+        top: calc(100% + 10px) !important;
+        transform-origin: top left !important;
+    }
+
+    .search-bar-wrapper {
+        width: 100% !important;
+    }
+
+    .dashboard-scroll-body {
+        grid-column: 2 !important;
+        height: 100vh !important;
+        overflow-y: auto !important;
+        padding: 2rem !important;
+        background-color: var(--bg-app) !important;
+    }
+
+    /* 3. Hero Section (Desktop Only) */
+    .hero-section {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        background: linear-gradient(135deg, var(--primary-light) 0%, var(--card-bg) 100%) !important;
+        border-radius: var(--radius-lg) !important;
+        padding: 3rem !important;
+        margin: 0 0 2rem 0 !important;
+        gap: 2rem !important;
+        border: 1px solid var(--border-color) !important;
+        overflow: hidden !important;
+    }
+
+    .hero-content {
+        flex: 1.2 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1.25rem !important;
+    }
+
+    .hero-title {
+        font-size: 2.8rem !important;
+        font-weight: 800 !important;
+        line-height: 1.15 !important;
+        color: var(--text-dark) !important;
+    }
+
+    .hero-highlight {
+        color: var(--primary) !important;
+    }
+
+    .hero-subtitle {
+        font-size: 1.05rem !important;
+        color: var(--text-muted) !important;
+        line-height: 1.5 !important;
+    }
+
+    .hero-btn {
+        align-self: flex-start !important;
+        padding: 0.85rem 2.25rem !important;
+        font-size: 1rem !important;
+        font-weight: 600 !important;
+        border-radius: var(--radius-full) !important;
+        box-shadow: var(--shadow-md) !important;
+        width: auto !important;
+    }
+
+    .hero-image-wrap {
+        flex: 0.8 !important;
+        height: 280px !important;
+        border-radius: var(--radius-md) !important;
+        overflow: hidden !important;
+        box-shadow: var(--shadow-md) !important;
+        border: 1px solid var(--border-color) !important;
+    }
+
+    .hero-image {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        transition: transform 0.5s ease !important;
+    }
+
+    .hero-image:hover {
+        transform: scale(1.04) !important;
+    }
+
+    /* Hide mobile category row, show sidebar categories list */
+    .dashboard-scroll-body .category-section {
+        display: none !important;
+    }
+
+    .sidebar-categories {
+        display: block !important;
+        margin-top: 1.5rem !important;
+        border-top: 1px solid var(--border-color) !important;
+        padding-top: 1.5rem !important;
+    }
+
+    .sidebar-section-title {
+        font-size: 0.82rem !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        color: var(--text-muted) !important;
+        letter-spacing: 1px !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .sidebar-category-list {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+    }
+
+    .sidebar-category-list .category-item {
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 0.85rem !important;
+        width: 100% !important;
+        padding: 0.5rem 0.75rem !important;
+        border-radius: var(--radius-md) !important;
+        transition: var(--transition) !important;
+        min-width: unset !important;
+    }
+
+    .sidebar-category-list .category-item:hover {
+        background-color: var(--primary-light) !important;
+    }
+
+    .sidebar-category-list .category-circle {
+        width: 42px !important;
+        height: 42px !important;
+        border-radius: var(--radius-sm) !important;
+        flex-shrink: 0 !important;
+        box-shadow: none !important;
+    }
+
+    .sidebar-category-list .category-icon {
+        font-size: 1.3rem !important;
+    }
+
+    .sidebar-category-list .category-name {
+        font-size: 0.92rem !important;
+        font-weight: 600 !important;
+    }
+
+    /* 4. Menu Items Grid */
+    .menu-item-list {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+        gap: 1.5rem !important;
+        padding-bottom: 4rem !important;
+    }
+
+    .menu-item-card {
+        height: 100% !important;
+    }
+
+    .item-image-wrapper {
+        height: 180px !important;
+    }
+
+    /* 5. Cart Drawer & Floating Cart Bar */
+    .cart-drawer {
+        position: absolute !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        left: auto !important;
+        right: 0 !important;
+        width: 420px !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        border-top-left-radius: var(--radius-lg) !important;
+        border-bottom-left-radius: var(--radius-lg) !important;
+        border-top-right-radius: 0 !important;
+        transform: translateX(100%) !important;
+        transition: transform 0.4s cubic-bezier(0.1, 0.76, 0.55, 0.94) !important;
+        padding: 1.5rem 1.5rem !important;
+    }
+
+    .cart-drawer.active {
+        transform: translateX(0) !important;
+    }
+
+    .drawer-handle-bar {
+        display: none !important;
+    }
+
+    .floating-cart-bar {
+        left: auto !important;
+        right: 2rem !important;
+        width: 380px !important;
+        bottom: 2rem !important;
+        box-shadow: var(--shadow-lg) !important;
+    }
+
+    /* 6. Checkout Screen Responsive Layout */
+    .checkout-scroll-body {
+        display: grid !important;
+        grid-template-columns: 1fr 400px !important;
+        gap: 2rem !important;
+        padding: 2.5rem !important;
+        max-width: 1200px !important;
+        margin: 0 auto !important;
+        align-items: start !important;
+    }
+
+    .checkout-scroll-body > .checkout-section:nth-child(1) {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
+    }
+
+    .checkout-scroll-body > .checkout-section:nth-child(2) {
+        grid-column: 1 !important;
+        grid-row: 2 !important;
+    }
+
+    .checkout-scroll-body > .checkout-section:nth-child(5) {
+        grid-column: 1 !important;
+        grid-row: 3 !important;
+        padding-bottom: 4rem !important;
+    }
+
+    .checkout-scroll-body > .checkout-section:nth-child(3) {
+        grid-column: 2 !important;
+        grid-row: 1 !important;
+    }
+
+    .checkout-scroll-body > .checkout-section:nth-child(4) {
+        grid-column: 2 !important;
+        grid-row: 2 !important;
+    }
+
+    .checkout-cta-bar {
+        position: absolute !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        display: flex !important;
+        justify-content: flex-end !important;
+        background: var(--bg-light) !important;
+        padding: 1.5rem 2.5rem !important;
+    }
+
+    .btn-place-order {
+        width: 400px !important;
+    }
+
+    /* 7. Centering Authentication Screens */
+    #auth-screen {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        background-color: var(--bg-app) !important;
+    }
+
+    #auth-screen .auth-header,
+    #auth-screen .auth-body {
+        width: 100% !important;
+        max-width: 450px !important;
+        background: var(--card-bg) !important;
+        border-left: 1px solid var(--border-color) !important;
+        border-right: 1px solid var(--border-color) !important;
+    }
+
+    #auth-screen .auth-header {
+        border-top: 1px solid var(--border-color) !important;
+        border-top-left-radius: var(--radius-lg) !important;
+        border-top-right-radius: var(--radius-lg) !important;
+        padding-top: 4rem !important;
+    }
+
+    #auth-screen .auth-body {
+        border-bottom: 1px solid var(--border-color) !important;
+        border-bottom-left-radius: var(--radius-lg) !important;
+        border-bottom-right-radius: var(--radius-lg) !important;
+        padding-bottom: 4rem !important;
+        padding-left: 2.5rem !important;
+        padding-right: 2.5rem !important;
+    }
+
+    /* Onboarding Profile Completion Screen Centering */
+    #profile-screen {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        background-color: var(--bg-app) !important;
+        overflow-y: auto !important;
+    }
+
+    #profile-screen .auth-header,
+    #profile-screen #profile-form,
+    #profile-screen #location-permission-banner,
+    #profile-screen .profile-photo-container {
+        width: 100% !important;
+        max-width: 480px !important;
+        background: var(--card-bg) !important;
+        border-left: 1px solid var(--border-color) !important;
+        border-right: 1px solid var(--border-color) !important;
+    }
+
+    #profile-screen .auth-header {
+        border-top: 1px solid var(--border-color) !important;
+        border-top-left-radius: var(--radius-lg) !important;
+        border-top-right-radius: var(--radius-lg) !important;
+        padding-top: 3rem !important;
+    }
+
+    #profile-screen #profile-form {
+        border-bottom: 1px solid var(--border-color) !important;
+        border-bottom-left-radius: var(--radius-lg) !important;
+        border-bottom-right-radius: var(--radius-lg) !important;
+        padding-bottom: 3rem !important;
+        padding-left: 2.5rem !important;
+        padding-right: 2.5rem !important;
+    }
+
+    #profile-screen .profile-close-btn {
+        right: calc(50% - 220px) !important;
+        top: 2rem !important;
+    }
+
+    /* 8. My Orders / History Centering */
+    #order-history-screen {
+        max-width: 900px !important;
+        margin: 0 auto !important;
+        border-left: 1px solid var(--border-color) !important;
+        border-right: 1px solid var(--border-color) !important;
+        height: 100vh !important;
+        background: var(--card-bg) !important;
+    }
+
+    /* 9. Admin Dashboard (Owner Command Center) */
+    #owner-dashboard {
+        display: grid !important;
+        grid-template-columns: 280px 1fr !important;
+        grid-template-rows: auto 1fr !important;
+        height: 100vh !important;
+        background-color: var(--bg-light) !important;
+    }
+
+    .owner-header {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 1.5rem !important;
+        padding: 2.5rem 1.5rem 1.5rem !important;
+        height: 100% !important;
+        border-bottom: none !important;
+    }
+
+    .owner-tab-bar {
+        grid-column: 1 !important;
+        grid-row: 2 !important;
+        flex-direction: column !important;
+        border-bottom: none !important;
+        border-right: 1px solid var(--border-color) !important;
+        background: var(--bg-light) !important;
+        padding-top: 1rem !important;
+        height: 100% !important;
+    }
+
+    .owner-tab {
+        border-bottom: none !important;
+        border-left: 3px solid transparent !important;
+        justify-content: flex-start !important;
+        padding: 1rem 1.5rem !important;
+    }
+
+    .owner-tab.active {
+        border-left-color: var(--primary) !important;
+        background-color: var(--primary-light) !important;
+    }
+
+    .owner-pane {
+        grid-column: 2 !important;
+        grid-row: 1 / span 2 !important;
+        height: 100vh !important;
+        overflow-y: auto !important;
+        padding: 2.5rem !important;
+    }
+
+    /* Split layout for Menu Manager inside Owner Pane */
+    #owner-menu-pane:not([style*="display: none"]) {
+        display: grid !important;
+        grid-template-columns: 380px 1fr !important;
+        grid-template-rows: auto 1fr !important;
+        gap: 1.5rem !important;
+        align-items: start !important;
+    }
+
+    .menu-crud-form-wrapper {
+        grid-column: 1 !important;
+        grid-row: 1 / span 2 !important;
+    }
+
+    .owner-menu-list-header {
+        grid-column: 2 !important;
+        grid-row: 1 !important;
+        margin-top: 0 !important;
+    }
+
+    .owner-menu-list {
+        grid-column: 2 !important;
+        grid-row: 2 !important;
+        max-height: calc(100vh - 160px) !important;
+        overflow-y: auto !important;
+    }
+}
+
 
