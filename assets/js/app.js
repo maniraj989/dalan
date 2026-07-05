@@ -141,7 +141,7 @@ function setupAuthEvents() {
         if (supabaseClient) {
             const { error } = await supabaseClient.auth.signInWithOAuth({
                 provider: 'google',
-                options: { redirectTo: window.location.origin + window.location.pathname }
+                options: { redirectTo: 'https://dalan-nu.vercel.app/' }
             });
             if (error) {
                 showToast(error.message, 'error');
