@@ -773,7 +773,7 @@ function showOrderSuccessOverlay(orderId) {
     const successDiv = document.createElement('div');
     successDiv.className = 'order-success-overlay';
     successDiv.innerHTML = `
-        <div class="order-success-icon">ðŸŽ‰</div>
+        <div class="order-success-icon">🎉</div>
         <div class="order-success-title">Order Placed!</div>
         <div class="order-success-sub">Your food is being prepared at Dalan's kitchen. We'll deliver it soon!</div>
         <div class="order-success-id">${orderId}</div>
@@ -938,17 +938,17 @@ function buildTrackerHtml(status, orderId) {
             <div class="oh-tracker-title">Live Order Status</div>
             <div class="oh-tracker-bar" id="tracker-bar-${orderId}">
                 <div class="oh-tracker-step ${s0}">
-                    <div class="oh-tracker-step-circle">ðŸ“¥</div>
+                    <div class="oh-tracker-step-circle">📥</div>
                     <div class="oh-tracker-step-label">Order<br>Received</div>
                 </div>
                 <div class="oh-tracker-connector ${c0}"><div class="oh-tracker-connector-fill"></div></div>
                 <div class="oh-tracker-step ${s1}">
-                    <div class="oh-tracker-step-circle">ðŸ›µ</div>
+                    <div class="oh-tracker-step-circle">🛵</div>
                     <div class="oh-tracker-step-label">Out for<br>Delivery</div>
                 </div>
                 <div class="oh-tracker-connector ${c1}"><div class="oh-tracker-connector-fill"></div></div>
                 <div class="oh-tracker-step ${s2}">
-                    <div class="oh-tracker-step-circle">âœ…</div>
+                    <div class="oh-tracker-step-circle">✅</div>
                     <div class="oh-tracker-step-label">Order<br>Delivered</div>
                 </div>
             </div>
@@ -981,12 +981,12 @@ function updateOrderStatusUI(updatedOrder) {
 
     // Update status badge text
     const badge = card.querySelector('.oh-status-badge');
-    const statusLabels = { pending: 'Order Received', preparing: 'Preparing', out_for_delivery: 'Out for Delivery', delivered: 'Delivered âœ“' };
+    const statusLabels = { pending: 'Order Received', preparing: 'Preparing', out_for_delivery: 'Out for Delivery', delivered: 'Delivered ✓' };
     if (badge) badge.innerText = statusLabels[updatedOrder.status] || updatedOrder.status;
 
     // If delivered, show a toast
     if (updatedOrder.status === 'delivered') {
-        showToast('ðŸŽ‰ Your order has been delivered!', 'success');
+        showToast('🎉 Your order has been delivered!', 'success');
         // Reload history to move card to past tab
         setTimeout(() => loadOrderHistory(), 1500);
     }
@@ -1057,7 +1057,7 @@ function setupOwnerDashboardEvents() {
 
     // Veg toggle label update
     document.getElementById('menu-item-isveg').addEventListener('change', function () {
-        document.getElementById('veg-toggle-label').innerText = this.checked ? 'ðŸŸ¢ Veg' : 'ðŸ”´ Non-Veg';
+        document.getElementById('veg-toggle-label').innerText = this.checked ? '🟢 Veg' : '🔴 Non-Veg';
     });
 
     // Photo uploader click
@@ -1292,12 +1292,12 @@ async function loadOwnerMenu() {
             <img src="${item.image_url || 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=120'}" class="owner-menu-item-img" alt="${item.name}">
             <div class="owner-menu-item-info">
                 <div class="owner-menu-item-name">${item.name}</div>
-                <div class="owner-menu-item-meta">${item.category} Â· ${item.is_veg ? 'ðŸŸ¢ Veg' : 'ðŸ”´ Non-Veg'}</div>
+                <div class="owner-menu-item-meta">${item.category} · ${item.is_veg ? '🟢 Veg' : '🔴 Non-Veg'}</div>
                 <div class="owner-menu-item-price">Rs. ${parseFloat(item.price).toFixed(2)}</div>
             </div>
             <div class="owner-menu-item-actions">
-                <button class="owner-menu-edit-btn" onclick="openEditMenuItem('${item.id}')">âœï¸ Edit</button>
-                <button class="owner-menu-delete-btn" onclick="deleteMenuItem('${item.id}')">ðŸ—‘ï¸ Del</button>
+                <button class="owner-menu-edit-btn" onclick="openEditMenuItem('${item.id}')">✏️ Edit</button>
+                <button class="owner-menu-delete-btn" onclick="deleteMenuItem('${item.id}')">🗑️ Del</button>
             </div>`;
         menuList.appendChild(card);
     });
@@ -1311,7 +1311,7 @@ function resetMenuForm() {
     document.getElementById('menu-item-delivery-time').value = '20';
     document.getElementById('menu-item-desc').value = '';
     document.getElementById('menu-item-isveg').checked = true;
-    document.getElementById('veg-toggle-label').innerText = 'ðŸŸ¢ Veg';
+    document.getElementById('veg-toggle-label').innerText = '🟢 Veg';
     document.getElementById('menu-item-photo').value = '';
     document.getElementById('menu-photo-preview').src = '';
     document.getElementById('menu-photo-preview').style.display = 'none';
@@ -1343,7 +1343,7 @@ window.openEditMenuItem = async (itemId) => {
     document.getElementById('menu-item-delivery-time').value = item.delivery_time_mins || 20;
     document.getElementById('menu-item-desc').value = item.description || '';
     document.getElementById('menu-item-isveg').checked = item.is_veg;
-    document.getElementById('veg-toggle-label').innerText = item.is_veg ? 'ðŸŸ¢ Veg' : 'ðŸ”´ Non-Veg';
+    document.getElementById('veg-toggle-label').innerText = item.is_veg ? '🟢 Veg' : '🔴 Non-Veg';
     document.getElementById('menu-submit-label').innerText = 'Update Item';
 
     if (item.image_url) {
